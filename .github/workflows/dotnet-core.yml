@@ -19,8 +19,9 @@ jobs:
         dotnet-version: 3.1.101
     - name: Install dependencies
       run:  |
+        cd src
         ls -la 
-        dotnet restore src/Google.Cloud.Extensions.Configuration.SecretManager.sln
+        dotnet restore
     - name: Build
       run: dotnet build src/Google.Cloud.Extensions.Configuration.SecretManager.sln --configuration Release --no-restore
     - name: Test
