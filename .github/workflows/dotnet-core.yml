@@ -21,10 +21,12 @@ jobs:
         dotnet-version: 3.1.101
     - name: Install dependencies
       working-directory: ${{env.working-directory}}
-      run: dotnet restore
+      run:  |
+        ls -la 
+        dotnet restore src/Google.Cloud.Extensions.Configuration.SecretManager.sln
     - name: Build
       working-directory: ${{env.working-directory}}
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build src/Google.Cloud.Extensions.Configuration.SecretManager.sln --configuration Release --no-restore
     - name: Test
       working-directory: ${{env.working-directory}}
-      run: dotnet src --no-restore --verbosity normal
+      run: dotnet test src/Google.Cloud.Extensions.Configuration.SecretManager.sln --no-restore --verbosity normal
