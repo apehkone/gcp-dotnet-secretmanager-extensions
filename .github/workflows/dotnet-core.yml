@@ -10,8 +10,6 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    env:
-      working-directory: Google.Cloud.Extensions.Configuration.SecretManager
 
     steps:
     - uses: actions/checkout@v2
@@ -20,13 +18,10 @@ jobs:
       with:
         dotnet-version: 3.1.101
     - name: Install dependencies
-      working-directory: ${{env.working-directory}}
       run:  |
         ls -la 
         dotnet restore src/Google.Cloud.Extensions.Configuration.SecretManager.sln
     - name: Build
-      working-directory: ${{env.working-directory}}
       run: dotnet build src/Google.Cloud.Extensions.Configuration.SecretManager.sln --configuration Release --no-restore
     - name: Test
-      working-directory: ${{env.working-directory}}
       run: dotnet test src/Google.Cloud.Extensions.Configuration.SecretManager.sln --no-restore --verbosity normal
