@@ -11,7 +11,7 @@ jobs:
 
     runs-on: ubuntu-latest
     env:
-      working-directory: ./Google.Cloud.Extensions.Configuration.SecretManager
+      working-directory: Google.Cloud.Extensions.Configuration.SecretManager
 
     steps:
     - uses: actions/checkout@v2
