@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -19,10 +18,8 @@ jobs:
         dotnet-version: 3.1.101
     - name: Install dependencies
       run:  |
-        cd src
-        ls -la 
-        dotnet restore
+        dotnet restore src/Google.Cloud.Extensions.Configuration.SecretManager   
     - name: Build
-      run: dotnet build src/Google.Cloud.Extensions.Configuration.SecretManager.sln --configuration Release --no-restore
+      run: dotnet build src/Google.Cloud.Extensions.Configuration.SecretManager  --configuration Release --no-restore
     - name: Test
-      run: dotnet test src/Google.Cloud.Extensions.Configuration.SecretManager.sln --no-restore --verbosity normal
+      run: dotnet test test/Google.Cloud.Extensions.Configuration.SecretManager.Test --no-restore --verbosity normal
