@@ -229,3 +229,6 @@ Thumbs.db
 
 # Launch Settings
 launchSettings.json
+
+# RIDER
+.idea/

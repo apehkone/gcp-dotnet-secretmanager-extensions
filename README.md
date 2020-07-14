@@ -1,0 +1,1 @@
+# gcp-dotnet-secretmanager-extensions
