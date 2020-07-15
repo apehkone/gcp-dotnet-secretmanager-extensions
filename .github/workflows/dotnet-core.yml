@@ -27,4 +27,4 @@ jobs:
     - name: Test
       run: dotnet test test/Google.Cloud.Extensions.Configuration.SecretManager.Test --no-restore --verbosity normal
     - name: Release
-      run: dotnet nuget push "src/Google.Cloud.Extensions.Configuration.SecretManager/bin/Release/*.nupkg" --source "github"  
+      run: dotnet nuget push "src/Google.Cloud.Extensions.Configuration.SecretManager/bin/Release/*.nupkg" 
