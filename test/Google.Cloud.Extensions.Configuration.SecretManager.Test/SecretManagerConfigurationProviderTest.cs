@@ -1,5 +1,9 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Google.Api.Gax;
 using Google.Api.Gax.Grpc;
 using Google.Api.Gax.ResourceNames;
@@ -20,42 +24,39 @@ namespace Google.Cloud.Extensions.Configuration.SecretManager.Test
         {
             var mockGrpcClient = new Mock<SecretManagerServiceClient>();
 
-
+            mockGrpcClient
+                .Setup(e => e.ListSecretsAsync(new ProjectName(PROJECT_NAME), null, null, null))
+                .Returns(new MockPagedEnumerable());
+            
+            
             var secretResponse = new AccessSecretVersionResponse() {
                 Payload = new SecretPayload{
                     Data = ByteString.FromBase64( System.Convert.ToBase64String(Encoding.UTF8.GetBytes("value")) )}};
-
-            mockGrpcClient
-                .Setup(e => e.ListSecrets(new ProjectName(PROJECT_NAME), null, null, null))
-                .Returns(new MockPagedEnumerable());
             
             mockGrpcClient
-                .Setup(e => e.AccessSecretVersion(new SecretVersionName(PROJECT_NAME, "param1", "latest"), null))
-                .Returns(secretResponse);
+                .Setup(e => e.AccessSecretVersionAsync(new SecretVersionName(PROJECT_NAME, "param1", "latest"), null))
+                .Returns(Task.FromResult(secretResponse));
             
             var configurationOptions = new SecretManagerConfigurationOptions {ProjectName = PROJECT_NAME};
             var configurationSource = new SecretManagerConfigurationSource(configurationOptions);
             
             var provider = new SecretManagerConfigurationProvider(mockGrpcClient.Object, configurationSource);
+            
             provider.Load();
 
             Assert.True(provider.TryGet("param1", out var value));
             Assert.Equal("value", value);
         }
 
-        private class MockPagedEnumerable : PagedEnumerable<ListSecretsResponse, Secret>
+        private class MockPagedEnumerable : PagedAsyncEnumerable<ListSecretsResponse, Secret>
         {
-            public override IEnumerator<Secret> GetEnumerator()
+            public override IAsyncEnumerator<Secret> GetAsyncEnumerator(CancellationToken cancellationToken = new CancellationToken())
             {
-                var secrets = new List<Secret>
-                {
-                    new Secret {SecretName = new SecretName(PROJECT_NAME, "param1")}
-                };
-            
-                return secrets.GetEnumerator();
+                var result = new List<Secret> {new Secret {SecretName = new SecretName(PROJECT_NAME, "param1")}};
+                return result.ToAsyncEnumerable().GetAsyncEnumerator(cancellationToken);
+
             }
         }
     }
-
-   
+  
 }
